@@ -129,28 +129,25 @@ def send_mail(email,url):
 
 
 #email取得、メール送信
-@app.route('/remind', methods=['GET','POST'])
+@app.route('/remind', methods=['POST'])
 def user_remind():
-    if request.method == 'POST':
-        app.config['SERVER_NAME']= '127.0.0.1:5000'
-        email = request.form.get('email')
-        token = create_token(email, app.secret_key, SALT)
-        '''
-        DbUser = dbConnect.getUser(email)
-        if email == '':
-            flash('メールアドレスを入力してください。')
-        elif DbUser == None:
-            flash('メールアドレスは登録されていません。')
-        else:  # リマインドメール送付
-        '''
-        with app.app_context():
-            url = url_for('reset', token=token, _external=True)
-        print(url)
-        send_mail(email, url)
-        return redirect('/login')
-    else:
-        return "Method Not Allowed", 405
-
+    app.config['SERVER_NAME']= 'wadachi.xyz'
+    email = request.form.get('email')
+    token = create_token(email, app.secret_key, SALT)
+    '''
+    DbUser = dbConnect.getUser(email)
+    if email == '':
+        flash('メールアドレスを入力してください。')
+    elif DbUser == None:
+        flash('メールアドレスは登録されていません。')
+    else:  # リマインドメール送付
+    '''
+    with app.app_context():
+        url = url_for('reset', token=token, _external=True)
+    print(url)
+    send_mail(email, url)
+    return redirect('/login')
+    
 
 @app.route('/reset')
 def reset():
@@ -158,25 +155,22 @@ def reset():
 
 # パスワード削除、新規パスワード設定
 # 新規パスワード取得
-@app.route('/reset', methods=['GET', 'POST'])
+@app.route('/reset', methods=['POST'])
 def reset_password():
     print("リセットパスワード")
-    if request.method == 'POST':
-            token = flask.request.args.get('token')
-            email = load_token(token, app.secret_key, SALT)
-            print(email) # 確認用　emailが来てる
-            password = request.form.get('password1')
-            password_chk = request.form.get('password2')
-            if password == '' or password_chk == '':
-                flash('空のフォームがあります')
-            elif password != password_chk:
-                flash('パスワードが一致していません。')
-            else:
-                password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-                dbConnect.reset_password(email, password)
-            return redirect('/login')
+    token = flask.request.args.get('token')
+    email = load_token(token, app.secret_key, SALT)
+    print(email) # 確認用　emailが来てる
+    password = request.form.get('password1')
+    password_chk = request.form.get('password2')
+    if password == '' or password_chk == '':
+        flash('空のフォームがあります')
+    elif password != password_chk:
+        flash('パスワードが一致していません。')
     else:
-        return redirect('/reset')
+        password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        dbConnect.reset_password(email, password)
+    return redirect('/login')
 
 
 # ユーザー削除

@@ -1,10 +1,10 @@
 DROP DATABASE Wadachi;
-DROP USER 'gruper'@'localhost';
+DROP USER 'gruper'@'10.0.0.202';
 
-CREATE USER 'gruper'@'localhost' IDENTIFIED BY 'Spring_e6';
+CREATE USER 'gruper'@'10.0.0.202' IDENTIFIED BY 'Spring_e6';
 CREATE DATABASE Wadachi;
 USE Wadachi
-GRANT ALL PRIVILEGES ON Wadachi.* TO 'gruper'@'localhost';
+GRANT ALL PRIVILEGES ON Wadachi.* TO 'gruper'@'10.0.0.202';
 
 -- usersテーブルの作成
 CREATE TABLE users (
@@ -13,7 +13,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     goal TEXT,
-    limit DATE,
+    limit_ DATE,
     start_date DATE NOT NULL
 );
 

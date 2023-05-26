@@ -6,7 +6,7 @@ class DB:
         # 例外処理
         try:
             conn = pymysql.connect(
-                host="localhost",
+                host="database-1.c5brxq7fwjz6.ap-northeast-1.rds.amazonaws.com",
                 db="Wadachi",
                 user="gruper",
                 password="Spring_e6",
